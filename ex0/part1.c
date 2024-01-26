@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 int readSize();
-int readNumbers(int numbersArray[], int size);
 int powerOfTwo(int numberFromArray);
+int* readNumbers(int size);
 
 /* Reads an integer from the standard input
 returns:
@@ -16,25 +16,29 @@ int readSize() {
 	return size;
 }
 
-/* Reads numbers from the standard input and update the array with those numbers
+/* Reads numbers from the standard input and returns the array with those numbers
 inputs :
- 1) numbersArray -array which needed to be updated with the numbers from the user's input.
- 2) size - the size of the array.
+ 1) size - the size of the array.
  
 returns:
- 1) 1 if one of the inputs is not an integer.
- 2) 0 if the array's update is success.
+ 1) NULL if one of the inputs is not an integer.
+ 2) The array of numbers if the array's update is success.
 */
-int readNumbers(int numbersArray[], int size){
+int* readNumbers(int size){
+    int *numbersArray = malloc(size * sizeof(*numbersArray));
+    if (numbersArray == NULL) {
+        return NULL;
+    }
     printf("Enter numbers:\n");
     for(int i=0; i<size; i++){
         if(scanf("%d", &numbersArray[i]) != 1){
-            printf("Invalid number\n");
-            return 1;
+            free(numbersArray);
+            return NULL;
         }
     }
-    return 0;
+    return numbersArray;
 }
+
 
 /* Check if a number is a power of 2 and if so it calculates the exponent
 input:
@@ -64,24 +68,23 @@ int powerOfTwo(int numberFromArray){
 }
 
 int main(){
-    int checkValidNumbers = 0; // 0 if the numbers from users are valid(integers), and 1 if one of them isn't integer
+
     int size = 0;
     int exponentSum = 0;
     int exponent;
+
     size = readSize();
     if (size < 1) {
 		printf("Invalid size\n");
-        return 1;
+        return 0;
 	}
-    int *numbersArrayFromUser = malloc(size * sizeof(*numbersArrayFromUser));
-    if (numbersArrayFromUser == NULL) {
+
+    int* numbersArrayFromUser = readNumbers(size);
+    if (numbersArrayFromUser == NULL){
+        printf("Invalid number\n");
         return 0;
     }
-    
-    checkValidNumbers = readNumbers(numbersArrayFromUser, size);
-    if (checkValidNumbers == 1){
-        return 1;
-    }
+
     for(int i=0; i<size; i++){
        exponent = powerOfTwo(numbersArrayFromUser[i]);
        if (exponent != -1){
