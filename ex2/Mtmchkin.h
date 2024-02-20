@@ -58,7 +58,7 @@ public:
 
 
     /*
-     *  destructor copy constructor and operator= not default destructor because allocated memory
+     *  destructor, copy constructor and operator= not default destructor because allocated memory
      */
     ~Mtmchkin();
 	
@@ -66,17 +66,24 @@ public:
 
     Mtmchkin& operator=(const Mtmchkin& other);
 
+    static const int GAME_MAX_LEVEL = 10;
+
 private:
     Player m_player;
     Card * m_cardsArray;
     int m_numberOfCards;
     GameStatus m_status;
     int m_cardIndex;
-    static Card* copyCardsArray(const Card* cardsArray, int numOfCards);
-    static const int GAME_MAX_LEVEL = 10;
 
-    /** updateGameStatus - change the game status according to if the player is in level 10 or with 0 hp.
-     * if level=10 - change m_status to Win
+    /** copyCardsArray - gets a pointer to a Card type Array which conatains the card type and the stats of the card.
+     * @param - 
+     *      cardsArray - the array of cards from type Card
+     *      numOfCards - the amount of cards in the cardsArray
+    */
+    static Card* copyCardsArray(const Card* cardsArray, int numOfCards);
+
+    /** updateGameStatus - change the game status according to if the player is in max_level or with 0 hp.
+     * if level=max_level - change m_status to Win
      * if hp=0 - change m_status to Loss.
     */
     void updateGameStatus();

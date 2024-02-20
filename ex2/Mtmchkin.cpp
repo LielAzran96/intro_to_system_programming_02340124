@@ -65,7 +65,7 @@ void Mtmchkin::updateGameStatus() {
     if(m_player.getLevel() == GAME_MAX_LEVEL) {
         m_status = GameStatus::Win;
     }
-    if(m_player.isKnockedOut()) {
+    else if(m_player.isKnockedOut()) {
         m_status = GameStatus::Loss;
     }
 }

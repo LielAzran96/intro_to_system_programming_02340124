@@ -1,7 +1,7 @@
 #ifndef EX2_UTILITIES_H
 #define EX2_UTILITIES_H
 
-//#include "Card.h"
+#include "Card.h"
 
 class CardStats;
 

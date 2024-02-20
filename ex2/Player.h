@@ -1,8 +1,7 @@
 #ifndef EX2_Player_H
 #define EX2_Player_H
 
-#include <cstring>
-#include "utilities.h"
+#include <string>
 
 class Player {
 public:
@@ -15,12 +14,12 @@ public:
      * @return
      *      A new instance of Player.
     */
-    Player(const char* name = "Efrat", const int maxHp = DEFAULT_MAX_HP, int force = DEFAULT_FORCE);
+    Player(const char* name, const int maxHp = DEFAULT_MAX_HP, int force = DEFAULT_FORCE);
 
-    /** Copy c'tor, destructor, and assignment operator of class Payer*/
-    Player(const Player& otherPlayer);
-    ~Player();
-    Player& operator=(const Player& otherPlayer);
+    /** Default Copy c'tor, d'tor, and assignment operator of class Player*/
+    Player(const Player& otherPlayer) = default;
+    ~Player() = default;
+    Player& operator=(const Player& otherPlayer) = default;
 
     /** printInfo - prints the player's info*/
     void printInfo() const;
@@ -36,17 +35,19 @@ public:
     /** buff - raises the force in an amount recieved by the user
      * @param forceToAdd - the amount of force that needs to be added to the player's current force.
     */
-    void buff(int forceToAdd);
+    void buff(const int forceToAdd);
 
-    /** heal - raises the force in an amount recieved by the user
-     * @param forceToAdd - the amount of force that needs to be added to the player's current force.
+    /** heal - raises the hp in an amount recieved by the user, until maxHP
+     * @param hpToAdd - the amount of hp that needs to be added to the player's current hp. 
+     * the hp can be raised until maximum hp of the player
     */
-    void heal(int hpToAdd);
+    void heal(const int hpToAdd);
 
-     /** damage - reduces the health points in an amount recieved by the user
-     * @param hpToRemove - the amount of HP that needs to be removed from the player's current force.
+     /** damage - reduces the health points in an amount recieved by the user, until hp reaches to zero.
+     * @param hpToRemove - the amount of HP that needs to be removed from the player's current hp.
+     * the hp can be removed until hp=0.
     */
-    void damage(int hpToRemove);
+    void damage(const int hpToRemove);
 
     /** isKnockedOut - checkes if the player's HP is reached to zero
      * @return - 
@@ -58,7 +59,7 @@ public:
     /** addCoins - add coins to the player's current coins
      * @param coinsToAdd - the amount of coins that needs to be added to the player's current coins.
     */
-    void addCoins(int coinsToAdd);
+    void addCoins(const int coinsToAdd);
 
     /** pay - pay coins
      * @param coinsToPay - the amount of coins that needs to be payed and removed from the the player's current coins.
@@ -66,7 +67,7 @@ public:
      *      true - if the payment succeeded
      *      false - if the payment fails (and no change is being made to the current player's coins)
     */
-    bool pay(int coinsToPay);
+    bool pay(const int coinsToPay);
 
     /** getAttackStrength - returns the attack strength of the player. 
      * the attack strength is defined as the force+level.
@@ -75,10 +76,8 @@ public:
     */
     int getAttackStrength() const;
 
-
-
 private:
-    char* m_name;
+    std::string m_name;
     int m_level;
     int m_force;
     int m_maxHp;
@@ -87,12 +86,10 @@ private:
 
     /** the initial and default variables of the class Player*/
     static const int INITIAL_LEVEL = 1;
-    static const int FINAL_LEVEL = 10;
+    static const int FINAL_LEVEL; 
     static const int INITIAL_COINS = 0;
     static const int DEFAULT_MAX_HP = 100;
     static const int DEFAULT_FORCE = 5;
 };
-
-
 
 #endif //EX2_Player_H

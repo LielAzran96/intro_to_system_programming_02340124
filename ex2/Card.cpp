@@ -1,22 +1,23 @@
 #include "Card.h"
 
-Card::Card(CardType type, const CardStats& stats) : m_effect(type), m_stats(stats) 
-{}
+Card::Card(CardType type, const CardStats& stats) : m_effect(type), m_stats(stats) {}
 
 void Card::applyEncounter(Player& player) const {
+    bool isWinBattle = false;
     switch(m_effect) {
         case CardType::Battle:
             /*winning the battle*/
             if(player.getAttackStrength() >= m_stats.force) {
+                isWinBattle = true;
                 player.levelUp();
                 player.addCoins(m_stats.loot);
-                printBattleResult(true);
             }
             /*loosing the battle*/
             else {
+                isWinBattle = false;
                 player.damage(m_stats.hpLossOnDefeat);
-                printBattleResult(false);
             }
+            printBattleResult(isWinBattle);
             break;
         case CardType::Buff:
         case CardType::Heal:
