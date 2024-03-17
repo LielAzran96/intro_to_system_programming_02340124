@@ -1,0 +1,122 @@
+#include "Player.h"
+#include "../Mtmchkin.h"
+#include "Job.h"
+#include "Behavior.h"
+
+/*initialize the Final level according to the game's laws.*/
+const int Player::FINAL_LEVEL = Mtmchkin::GAME_MAX_LEVEL; 
+
+Player::Player(const string name) : m_name(name), m_level(INITIAL_LEVEL),
+    m_force(DEFAULT_FORCE), m_hp(HealthPoints()), m_coins(INITIAL_COINS), m_job(nullptr), m_behavior(nullptr) {};
+
+string Player::getName() const {
+    return m_name;
+}
+
+string Player::getDescription() const {
+    return m_name + ", " + m_job->getName() + " with " + m_behavior->getName() +
+     " behavior " + "(level " + std::to_string(m_level) + ", force " + std::to_string(m_force) + ")";
+}
+
+bool operator<(const Player& player1, const Player& player2) {
+    if(player1.m_level < player2.m_level) {
+        return true;
+    }
+    else if(player1.m_coins < player2.m_coins) {
+        return true;
+    }
+    else {
+        return player1.m_name < player2.m_name;
+    }
+}
+
+int Player::getForce() const {
+    return m_force;
+}
+
+
+int Player::getHealthPoints() const {
+    return m_hp.m_healthPoints;
+}
+
+int Player::getMaxHp() const {
+    return m_hp.m_maxHealthPoints;
+}
+int Player::getCoins() const {
+    return m_coins;
+}
+
+void Player::updateForce(const int forceToUpdate) {
+    m_force += forceToUpdate;
+    if(m_force < 0) {
+        m_force = 0;
+    }
+}
+
+void Player::damageHP(const int hpToRemove) {
+    m_hp -= hpToRemove;
+}
+
+
+void Player::heal(const int hpToAdd) {
+    m_hp += hpToAdd;
+}
+
+void Player::levelUp() {
+    if(m_level < FINAL_LEVEL) {
+        m_level++;
+    }
+}
+
+int Player::getLevel() const {
+    return m_level;
+}
+
+int Player::getCombatPower() const {
+   return m_job->getPower(*this);
+}
+
+const Job& Player::getJob() const {
+    return *m_job;
+}
+
+const Behavior& Player::getBehavior() const {
+    return *m_behavior;
+}
+
+bool Player::isKnockedOut() const {
+    return (m_hp == 0) ? true : false;
+}
+
+void Player::addCoins(const int coinsToAdd) {
+    if(coinsToAdd >= 0) {
+        m_coins += coinsToAdd;
+    }
+}
+
+bool Player::pay(const int coinsToPay) {
+    /*also handles the case of coinsToPay<0*/
+    if(coinsToPay > m_coins || coinsToPay < 0) {
+        return false;
+    }
+    m_coins -= coinsToPay;
+    return true;
+}
+
+void Player::setBehavior(const string& behaviorName) {
+    if(behaviorName == "Responsible") {
+        m_behavior = unique_ptr<ResponsibleBehavior>(new ResponsibleBehavior());
+    }
+    else if(behaviorName == "RiskTaking") {
+        m_behavior = unique_ptr<RiskTakerBehavior>(new RiskTakerBehavior());
+    }
+}
+
+void Player::setJob(const string& jobName) {
+    if(jobName == "Warrior") {
+        m_job = unique_ptr<Warrior>(new Warrior());
+    }
+    else if(jobName == "Sorcerer") {
+        m_job = unique_ptr<Sorcerer>(new Sorcerer());
+    }
+}
