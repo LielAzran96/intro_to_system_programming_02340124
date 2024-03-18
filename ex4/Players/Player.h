@@ -18,7 +18,7 @@ public:
      * @param name - The name of the player.
      * @param job - The job of the player.
      * @param behavior - The behavior of the player.
-     * 
+     * dd
      * @return
      *      A new instance of Player.
     */
@@ -74,8 +74,9 @@ public:
     /** updateForce - raises/decreases the force in an amount recieved by the user
      * @param forceToUpdate - the amount of force that needs to be added/remove to the player's current force.
      * minimal force is zero
+     * @return - true if the force updates, false if not
     */
-    void updateForce(const int forceToUpdate);
+    bool updateForce(const int forceToUpdate);
 
     /** heal - raises the hp in an amount recieved by the user, until maxHP
      * @param hpToAdd - the amount of hp that needs to be added to the player's current hp. 
@@ -135,7 +136,7 @@ private:
      /** the initial and default variables of the class Player*/
     static const int INITIAL_LEVEL = 1;
     static const int FINAL_LEVEL; 
-    static const int INITIAL_COINS = 0;
+    static const int INITIAL_COINS = 10;
     static const int DEFAULT_FORCE = 5;
 
 };

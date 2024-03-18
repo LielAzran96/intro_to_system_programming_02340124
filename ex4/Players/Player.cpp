@@ -19,14 +19,12 @@ string Player::getDescription() const {
 }
 
 bool operator<(const Player& player1, const Player& player2) {
-    if(player1.m_level < player2.m_level) {
-        return true;
-    }
-    else if(player1.m_coins < player2.m_coins) {
-        return true;
-    }
-    else {
-        return player1.m_name < player2.m_name;
+    if (player1.m_level != player2.m_level) {
+        return player1.m_level > player2.m_level; // Sort by level from high to low
+    } else if (player1.m_coins != player2.m_coins) {
+        return player1.m_coins > player2.m_coins; // Sort by coins from high to low
+    } else {
+        return player1.m_name < player2.m_name; // Sort by name in lexicographical order
     }
 }
 
@@ -46,11 +44,14 @@ int Player::getCoins() const {
     return m_coins;
 }
 
-void Player::updateForce(const int forceToUpdate) {
+bool Player::updateForce(const int forceToUpdate) {
+    bool isUpdated = true;
     m_force += forceToUpdate;
     if(m_force < 0) {
         m_force = 0;
+        isUpdated = false;   
     }
+    return isUpdated;
 }
 
 void Player::damageHP(const int hpToRemove) {
@@ -108,7 +109,7 @@ void Player::setBehavior(const string& behaviorName) {
         m_behavior = unique_ptr<ResponsibleBehavior>(new ResponsibleBehavior());
     }
     else if(behaviorName == "RiskTaking") {
-        m_behavior = unique_ptr<RiskTakerBehavior>(new RiskTakerBehavior());
+        m_behavior = unique_ptr<RiskTakingBehavior>(new RiskTakingBehavior());
     }
 }
 

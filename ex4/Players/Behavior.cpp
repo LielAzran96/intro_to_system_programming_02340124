@@ -20,9 +20,9 @@ void ResponsibleBehavior::handleEvent(Player& player, string& result) const {
     result = getPotionsPurchaseMessage(player, amountOfPotions);
 }
 
-const string RiskTakerBehavior::NAME = "RiskTaking";
+const string RiskTakingBehavior::NAME = "RiskTaking";
 
-void RiskTakerBehavior::handleEvent(Player& player, string& result) const {
+void RiskTakingBehavior::handleEvent(Player& player, string& result) const {
     int amountOfPotions = 0;
     if(player.getHealthPoints() < 50) {
         player.pay(PotionsMerchant::POTION_COST); 

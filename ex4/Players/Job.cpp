@@ -8,8 +8,13 @@ const string& Job::getName() const {
 }
 
 void Job::handleEvent(Player& player, string& result) const {
-    player.updateForce(-SolarEclipse::FORCE_TO_UPDATE); //remove force
-    result = getSolarEclipseMessage(player, -SolarEclipse::FORCE_TO_UPDATE);
+    /*remove force*/
+    if(player.updateForce(-SolarEclipse::FORCE_TO_UPDATE)){
+        result = getSolarEclipseMessage(player, -SolarEclipse::FORCE_TO_UPDATE);
+    } 
+    else {
+        result = getSolarEclipseMessage(player, 0);
+    }
 }
 
 int Job::getPower(const Player& player) const {
@@ -27,7 +32,12 @@ int Warrior::getPower(const Player& player) const {
 const string Sorcerer::NAME = "Sorcerer";
 
 void Sorcerer::handleEvent(Player& player, string& result) const {
-    player.updateForce(SolarEclipse::FORCE_TO_UPDATE); //add force
-    result = getSolarEclipseMessage(player, SolarEclipse::FORCE_TO_UPDATE);
+    /*add force*/
+    if(player.updateForce(SolarEclipse::FORCE_TO_UPDATE)) {
+        result = getSolarEclipseMessage(player, SolarEclipse::FORCE_TO_UPDATE);
+    }
+    else {
+        result = getSolarEclipseMessage(player, 0);
+    }
 }
 

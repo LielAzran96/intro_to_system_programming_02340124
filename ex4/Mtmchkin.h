@@ -14,13 +14,6 @@ using std::vector;
 using std::queue;
 class Player;
 class Card;
-/*
- * GameStatus:
- * MidGame - The game is still active and the players continue to encounter cards.
- * Win - One (or more) of the players reached level 10.
- * Loss - The player's HP is 0.
-*/
-// enum class GameStatus{Win, Loss, MidGame};
 
 class Mtmchkin{
 private:
@@ -29,7 +22,6 @@ private:
     std::queue<shared_ptr<Card>> m_Cards;
     shared_ptr<Player> m_currentPlayer;
     shared_ptr<Card> m_currentCard;
-    //GameStatus m_status;
     int m_turnIndex;
 
     /**
@@ -74,8 +66,11 @@ public:
      *
     */
     Mtmchkin(const string& deckPath, const string& playersPath);
-
+    /*deafult c'tor as well so we wont need to use initialization list*/
     Mtmchkin() = default;
+     ~Mtmchkin() = default;
+    Mtmchkin(const Mtmchkin&) = default;
+    Mtmchkin& operator=(const Mtmchkin&) = default;
     /**
      * Plays the entire game
      * 

@@ -7,8 +7,10 @@ class Player;
 class Behavior {
 public:
     Behavior(const string& behaviorName) : m_behaviorName(behaviorName) {};
-    virtual void handleEvent(Player& player, string& result) const = 0; 
     virtual ~Behavior() = default;
+    Behavior(const Behavior&) = default;
+    Behavior& operator=(const Behavior&) = default;
+    virtual void handleEvent(Player& player, string& result) const = 0; 
     const string& getName() const;
 protected:
     string m_behaviorName;
@@ -17,14 +19,20 @@ protected:
 class ResponsibleBehavior : public Behavior {
 public:
     ResponsibleBehavior() : Behavior(NAME) {};
+    ~ResponsibleBehavior() = default;
+    ResponsibleBehavior(const ResponsibleBehavior&) = default;
+    ResponsibleBehavior& operator=(const ResponsibleBehavior&) = default;
     void handleEvent(Player& player, string& result) const override;
 private:
     static const string NAME;
 };
 
-class RiskTakerBehavior : public Behavior {
+class RiskTakingBehavior : public Behavior {
 public:
-    RiskTakerBehavior() : Behavior(NAME) {};
+    RiskTakingBehavior() : Behavior(NAME) {};
+    ~RiskTakingBehavior() = default;
+    RiskTakingBehavior(const RiskTakingBehavior&) = default;
+    RiskTakingBehavior& operator=(const RiskTakingBehavior&) = default;
     void handleEvent(Player& player, string& result) const override;
 private:
     static const string NAME;
