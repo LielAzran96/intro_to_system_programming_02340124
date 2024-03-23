@@ -1,41 +1,40 @@
 #ifndef EX4_Job_H
 #define EX4_Job_H
-#include "Player.h"
+#include <vector>
+#include <string>
 class Player;
 
 class Job {
 public:
-    Job(const string& jobName) : m_jobName(jobName) {};
+    Job(const std::string& jobName) : m_jobName(jobName) {};
     virtual ~Job() = default;
     Job(const Job&) = default;
     Job& operator=(const Job&) = default;
     virtual int getPower(const Player& player) const;
-    virtual void handleEvent(Player& player, string& result) const;
-    const string& getName() const;
+    virtual void handleEvent(Player& player, std::string& result) const;
+    virtual bool handleBattle(Player& player, int monsterPower, int monsterLoot, int monsterDamage) const;
+    const std::string& getName() const;
+    static const std::vector<std::string> JOB_VECTOR;
 private:
-    string m_jobName;
+    std::string m_jobName;
 };
 
 class Warrior : public Job {
 public:
-    Warrior() : Job(NAME) {};
+    Warrior() : Job(JOB_VECTOR[0]) {};
     ~Warrior() = default;
     Warrior(const Warrior&) = default;
     Warrior& operator=(const Warrior&) = default;
     int getPower(const Player& player) const override;
-private:
-    static const string NAME;
 };
 
 class Sorcerer : public Job {
 public:
-    Sorcerer() : Job(NAME) {};
+    Sorcerer() : Job(JOB_VECTOR[1]) {};
     ~Sorcerer() = default;
     Sorcerer(const Sorcerer&) = default;
     Sorcerer& operator=(const Sorcerer&) = default;
-    void handleEvent(Player& playe, string& result) const override;
-private:
-    static const string NAME;
+    void handleEvent(Player& playe, std::string& result) const override;
 };
 
 

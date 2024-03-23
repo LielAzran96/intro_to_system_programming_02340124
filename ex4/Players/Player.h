@@ -1,142 +1,199 @@
-
 #pragma once
 
 #include <string>
 #include "HealthPoints.h"
 #include <memory>
-class Job;
-class Behavior;
-
-using std::string;
-using std::unique_ptr;
+#include "Job.h"
+#include "Behavior.h"
 
 class Player {
 public:
     /**
-     * C'tor of Payer class
+     * Constructor of Player class.
      *
      * @param name - The name of the player.
-     * @param job - The job of the player.
-     * @param behavior - The behavior of the player.
-     * dd
-     * @return
-     *      A new instance of Player.
+     * @return A new instance of Player.
     */
-    explicit Player(const string name);
+    explicit Player(const std::string name);
+
+    /**
+     * Destructor of Player class.
+    */
     ~Player() = default;
-    /**
-     * Gets the description of the player
-     * 
-     * @return - description of the player
-    */
-    string getDescription() const;
+    /*delete the option to copy \ assign one player to another*/
+    Player& operator=(const Player& ) = delete;
+    Player(const Player& ) = delete;
 
     /**
-     * Gets the name of the player
+     * Gets the description of the player.
      * 
-     * @return - name of the player
+     * @return Description of the player.
     */
-    string getName() const;
+    std::string getDescription() const;
 
     /**
-     * Gets the current level of the player
+     * Gets the name of the player.
      * 
-     * @return - level of the player
+     * @return Name of the player.
+    */
+    std::string getName() const;
+
+    /**
+     * Gets the current level of the player.
+     * 
+     * @return Level of the player.
     */
     int getLevel() const;
 
     /**
-     * Gets the of force the player has
+     * Gets the force points of the player.
      * 
-     * @return - force points of the player
+     * @return Force points of the player.
     */
     int getForce() const;
 
     /**
-     * Gets the amount of health points the player currently has
+     * Gets the amount of health points the player currently has.
      * 
-     * @return - health points of the player
+     * @return Health points of the player.
     */
     int getHealthPoints() const;
 
-    int getMaxHp() const;
     /**
-     * Gets the amount of coins the player has
+     * Gets the maximum health points of the player.
      * 
-     * @return - coins of the player
+     * @return Maximum health points of the player.
+    */
+    int getMaxHp() const;
+
+    /**
+     * Gets the amount of coins the player has.
+     * 
+     * @return Coins of the player.
     */
     int getCoins() const;
 
-    /** levelUp - raises the player's level in 1 level up.
-     the max level is 10 - so when a player is in level 10, nothing will be changed*/
+    /**
+     * Increases the player's level by 1.
+     * The maximum level is 10.
+    */
     void levelUp();
 
-    /** updateForce - raises/decreases the force in an amount recieved by the user
-     * @param forceToUpdate - the amount of force that needs to be added/remove to the player's current force.
-     * minimal force is zero
-     * @return - true if the force updates, false if not
+    /**
+     * Updates the player's force by adding or subtracting a specified amount.
+     * 
+     * @param forceToUpdate The amount of force to update.
+     * @return True if the force updates, false otherwise.
     */
     bool updateForce(const int forceToUpdate);
 
-    /** heal - raises the hp in an amount recieved by the user, until maxHP
-     * @param hpToAdd - the amount of hp that needs to be added to the player's current hp. 
-     * the hp can be raised until maximum hp of the player
+    /**
+     * Increases the player's health points by a specified amount, up to the maximum HP.
+     * 
+     * @param hpToAdd The amount of HP to add.
     */
     void heal(const int hpToAdd);
 
-     /** damageHP - reduces the health points in an amount recieved by the user, until hp reaches to zero.
-     * @param hpToRemove - the amount of HP that needs to be removed from the player's current hp.
-     * the hp can be removed until hp=0.
+    /**
+     * Reduces the player's health points by a specified amount.
+     * 
+     * @param hpToRemove The amount of HP to remove.
     */
     void damageHP(const int hpToRemove);
 
-    /** isKnockedOut - checkes if the player's HP is reached to zero
-     * @return - 
-     *      true - if the HP is 0.
-     *      false - if the HP is not 0.
+    /**
+     * Checks if the player's HP is zero.
+     * 
+     * @return True if HP is 0, false otherwise.
     */
     bool isKnockedOut() const;
 
-    /** addCoins - add coins to the player's current coins
-     * @param coinsToAdd - the amount of coins that needs to be added to the player's current coins.
+    /**
+     * Adds coins to the player's current coins.
+     * 
+     * @param coinsToAdd The amount of coins to add.
     */
     void addCoins(const int coinsToAdd);
 
-    /** pay - pay coins
-     * @param coinsToPay - the amount of coins that needs to be payed and removed from the the player's current coins.
-     * @return -
-     *      true - if the payment succeeded
-     *      false - if the payment fails (and no change is being made to the current player's coins)
+    /**
+     * Pays coins and subtracts them from the player's current coins.
+     * 
+     * @param coinsToPay The amount of coins to pay.
+     * @return True if the payment succeeded, false otherwise.
     */
     bool pay(const int coinsToPay);
 
-    /** getCombatPower - returns the combat power strength of the player. 
-     * the default combat power is defined as the force + level.
-     * for warriors its force*2 + level.
-     * 
-     * @return - the amount of attack strength computed inside the member function.
+    /**
+     * Computes and returns the combat power strength of the player.
+     * for a regular player - force + level. for a warrior - 2*force + level
+     * @return Combat power strength.
     */
     int getCombatPower() const;
 
-    void setBehavior(const string& behaviorName);
+    /**
+     * Sets the behavior of the player.
+     * 
+     * @param behavior The behavior of the player.
+    */
+    void setBehavior(const std::unique_ptr<Behavior> behavior);
+
+    /**
+     * Gets the behavior of the player.
+     * 
+     * @return Reference to the player's behavior.
+    */
     const Behavior& getBehavior() const;
 
-    void setJob(const string& jobName);
+    /**
+     * Sets the job of the player.
+     * 
+     * @param job The job of the player.
+    */
+    void setJob(std::unique_ptr<Job> job);
+
+    /**
+     * Gets the job of the player.
+     * 
+     * @return Reference to the player's job.
+    */
     const Job& getJob() const;
+
+    /**
+     * Handles the effects of a Solar Eclipse event.
+     * 
+     * @param result - string that contains how many force the player lost\recieve.
+    */
+    void handleSolarEclipse(std::string& result); 
+
+    /**
+     * Handles the effects of a Potions Merchant event.
+     * 
+     * @param result - string that containts how many potions the player bought
+    */
+    void handlePotionsMerchant(std::string& result); 
+
+    /**
+     * Handles the battle with a monster.
+     * 
+     * @param monsterPower Power of the monster.
+     * @param monsterLoot Loot of the monster.
+     * @param monsterDamage Damage of the monster.
+     * @return True if the battle is successful, false otherwise.
+    */
+    bool handleBattle(int monsterPower, int monsterLoot, int monsterDamage); 
+
 private:
-    string m_name;
+    std::string m_name;
     int m_level;
     int m_force;
     HealthPoints m_hp;
     int m_coins;
-    unique_ptr<Job> m_job;
-    unique_ptr<Behavior> m_behavior;
-    friend bool operator<(const Player& player1, const Player& player2);
+    std::unique_ptr<Job> m_job;
+    std::unique_ptr<Behavior> m_behavior;
 
-     /** the initial and default variables of the class Player*/
+    friend bool operator<(const Player& player1, const Player& player2);
     static const int INITIAL_LEVEL = 1;
     static const int FINAL_LEVEL; 
     static const int INITIAL_COINS = 10;
     static const int DEFAULT_FORCE = 5;
-
 };

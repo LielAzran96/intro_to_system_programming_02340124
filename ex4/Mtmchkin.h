@@ -5,24 +5,32 @@
 #include <memory>
 #include <vector>
 #include <queue>
-
-#include <set>
-#include <queue>
+#include "BehaviorFactory.h"
+#include "JobFactory.h"
+#include "CardFactory.h"
+#include <fstream>
 using std::string;
 using std::shared_ptr;
+using std::unique_ptr;
 using std::vector;
 using std::queue;
+
 class Player;
 class Card;
 
 class Mtmchkin{
 private:
-    std::vector<shared_ptr<Player>> m_players;
-    vector<shared_ptr<Player>> m_playersSorted;
-    std::queue<shared_ptr<Card>> m_Cards;
+    vector<shared_ptr<Player>> m_players;
+    /*sorted vector of players based on their ranking*/
+    vector<std::shared_ptr<Player>> m_playersSorted;
+    queue<unique_ptr<Card>> m_cards;
     shared_ptr<Player> m_currentPlayer;
-    shared_ptr<Card> m_currentCard;
+    unique_ptr<Card> m_currentCard;
     int m_turnIndex;
+    unique_ptr<BehaviorFactory> m_behaviorFactory;
+    unique_ptr<JobFactory> m_jobFactory;
+    unique_ptr<CardFactory> m_cardFactory;
+    bool m_isAnyPlayerReachedMaxLevel; //default c'tor will initialize it to false
 
     /**
      * Playes a single turn for a player
@@ -47,14 +55,20 @@ private:
     */
     bool isGameOver() const;
 
-    void setCurrentCard();
+    /**
+     * updatePlayersVector - update the m_players vector based in the input file
+     * 
+     * @return - void
+    */
+    void updatePlayersVector(std::ifstream& playersFile);
 
-    // GameStatus getGameStatus() const;
-    // void updateGameStatus();
+    /**
+     * updateCardQueue - update the m_cards queue based in the input file
+     * 
+     * @return - void
+    */
+    void updateCardQueue(std::ifstream& cardsFile);
 
-    Player& getCurrentPlayer() const;
-    Card& getCurrentCard() const;
-    
 public:
     /**
      * Constructor of Mtmchkin class
@@ -66,11 +80,14 @@ public:
      *
     */
     Mtmchkin(const string& deckPath, const string& playersPath);
-    /*deafult c'tor as well so we wont need to use initialization list*/
-    Mtmchkin() = default;
-     ~Mtmchkin() = default;
-    Mtmchkin(const Mtmchkin&) = default;
-    Mtmchkin& operator=(const Mtmchkin&) = default;
+    
+    /*default d'tor*/
+    
+    /*delete assignment operator and copy c'tor*/
+    ~Mtmchkin() = default;
+    Mtmchkin(const Mtmchkin&) = delete;
+    Mtmchkin& operator=(const Mtmchkin&) = delete;
+    
     /**
      * Plays the entire game
      * 

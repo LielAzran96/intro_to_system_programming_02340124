@@ -1,65 +1,55 @@
 #include "Monster.h"
-#include <array>
+#include "../Players/Player.h"
+#include "../utilities.h"
 
+using std::map;
+using std::string;
 
-const map<string, std::array<int, 3>> Monster::monstersMap = {
-    {"Goblin", {5, 2, 10}},
-    {"Giant", {12, 5, 25}},
-    {"Dragon", {17, 100, 9001}},
-    {"Gang", {0, 0, 0}}
+const std::map<std::string, std::map<string, int>> Monster::MONSTER_MAP = {
+    {"Goblin", {{"power", 5}, {"loot", 2}, {"damage", 10}}},
+    {"Giant", {{"power", 12}, {"loot", 5}, {"damage", 25}}},
+    {"Dragon", {{"power", 17}, {"loot", 100}, {"damage", 9001}}},
 };
 
-Monster::Monster() : m_name(""), m_power(0), m_loot(0), m_damage(0), m_numberOfMonsters(0) {
-    // map<string, std::array<int, 3>> ::const_iterator it;
-    // it = monstersMap.find(name);
-    // if(it != monstersMap.end()) {
-    //     m_name = name;
-    // }
-    // else {
-    //     throw MonsterNotFound();
-    //}
-};
+Monster::Monster(const string& name) : Card(name), m_power(0), m_loot(0), m_damage(0) {
+    auto it = MONSTER_MAP.find(name);
+    if (it != MONSTER_MAP.end()) {
+        m_power = it->second.at("power");
+        m_loot = it->second.at("loot");
+        m_damage = it->second.at("damage");
+    } 
+}
 
-void Monster::addMonster(const string& name) {
-    map<string, std::array<int, 3>> ::const_iterator it;
-    it = monstersMap.find(name);
-    if(it != monstersMap.end()) {
-        m_name = name;
-        m_power += it->second[0];
-        m_loot += it->second[1];
-        m_damage += it->second[2];
-        m_numberOfMonsters++;
+void Gang::addMonster(const string& name) {
+    auto it = MONSTER_MAP.find(name);
+    if(it != MONSTER_MAP.end()) {
+        m_power += it->second.at("power");
+        m_loot += it->second.at("loot");
+        m_damage += it->second.at("damage");
     }
     else {
         throw MonsterNotFound();
     }
 }
 
-const string& Monster::getName() const {
-    return m_name;
+void Gang::setMonstersNumber(int number) {
+    m_numberOfMonsters = number;
 }
 
-int Monster::getPower() const {
-    return m_power;
+/*Battle Scenario*/
+string Monster::applyCard(Player& player) const {
+    bool isWin = false;
+    isWin = player.handleBattle(m_power, m_loot, m_damage);
+    return (isWin) ?  getEncounterWonMessage(player, m_loot) : getEncounterLostMessage(player, m_damage);
 }
 
-int Monster::getLoot() const {
-    return m_loot;
+string Monster::getDescription() const {
+    return m_cardName + " (power " + std::to_string(m_power) + ", loot " +
+     std::to_string(m_loot) + ", damage " + std::to_string(m_damage) + ")";
 }
 
-int Monster::getDamage() const {
-    return m_damage;
+
+string Gang::getDescription() const {
+    return m_cardName + "Gang of " + std::to_string(m_numberOfMonsters) + " members " + "(power " + std::to_string(m_power) +
+    ", loot " + std::to_string(m_loot) + ", damage " + std::to_string(m_damage) + ")";
 }
-
-// int main() {
-//     Monster monster("Goblin");
-//     monster.addMonster(monster.getName());
-
-//     Monster monster2("Gang");
-//     std::vector<string> monsters = {"Goblin", "Dragon", "Goblin"};
-//     for(string name:monsters) {
-//         monster2.addMonster(name);
-//     }
-    
-//     return 0;
-// }

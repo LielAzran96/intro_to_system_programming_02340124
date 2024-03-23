@@ -1,59 +1,46 @@
+#ifndef EX4_Card_H
+#define EX4_Card_H
 
-#pragma once
-
-#include "Monster.h"
 #include <string>
-#include <memory>
-using std::unique_ptr;
+#include <vector>
 
+using std::string; 
 class Player;
 
 class Card {
 public:
     /**
-     * Gets the description of the card
+     * Constructor for Card class.
      * 
-     * @return - the description of the card
-    */
+     * @param name - The name of the card.
+     */
     Card(const std::string& name) : m_cardName(name) {};
-    virtual string getDescription() const;
-    virtual string applyCard(Player& player) const = 0;
+
+    Card(const Card&) = default;
+    Card& operator=(const Card&) = default;
+
+    /**
+     * Virtual function to get the description of the card.
+     * 
+     * @return - The description of the card.
+     */
+    virtual std::string getDescription() const;
+
+    /**
+     * Virtual function to apply the effect of the card on a player.
+     * 
+     * @param player - The player to apply the card's effect on.
+     * @return - A message indicating the result of applying the card.
+     */
+    virtual std::string applyCard(Player& player) const = 0;
+
     virtual ~Card() = default;
-    static unique_ptr<Card> createCard(const string& cardName);
+
+    /*Static vector containing event names*/
+    static const std::vector<std::string> EVENTS_VECTOR;
+
 protected:
-    std::string m_cardName;
+    std::string m_cardName; 
 };
 
-class Encounter : public Card {
-public:
-    Encounter() : Card(""), m_monster(new Monster()) {};
-    string applyCard(Player& player) const override;
-    string getDescription() const override;
-    Monster& getMonster();
-    void setCardName(const string& cardName);
-    ~Encounter() = default;
-private:
-    std::unique_ptr<Monster> m_monster;
-};
-
-
-class SolarEclipse : public Card {
-public:
-    SolarEclipse() : Card(NAME) {};
-    ~SolarEclipse() = default;
-    string applyCard(Player& player) const override;
-    static const int FORCE_TO_UPDATE = 1;
-private:
-    static const std::string NAME;
-};
-
-class PotionsMerchant : public Card {
-public:
-    PotionsMerchant() : Card(NAME) {};
-    ~PotionsMerchant() = default;
-    string applyCard(Player& player) const override;
-    static const int HP_TO_GIVE = 10;
-    static const int POTION_COST = 5;
-private:
-    static const std::string NAME;
-};
+#endif //EX4_Card_H

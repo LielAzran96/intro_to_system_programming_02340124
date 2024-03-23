@@ -1,18 +1,18 @@
 #include "Behavior.h"
 #include "Player.h"
-#include "../Cards/Card.h"
+#include "../Cards/Events.h"
 #include <memory>
 #include "../utilities.h"
+
+const vector<string> Behavior::BEHAVIOR_VECTOR = {"Responsible", "RiskTaking"};
 
 const string& Behavior::getName() const {
     return m_behaviorName;
 }
 
-const string ResponsibleBehavior::NAME = "Responsible";
-
 void ResponsibleBehavior::handleEvent(Player& player, string& result) const {
     int amountOfPotions = 0;
-     while((player.getCoins() != 0) && (player.getHealthPoints() != player.getMaxHp())) {
+     while((player.getCoins() >= PotionsMerchant::POTION_COST) && (player.getHealthPoints() != player.getMaxHp())) {
         player.pay(PotionsMerchant::POTION_COST); 
         player.heal(PotionsMerchant::HP_TO_GIVE);
         amountOfPotions++;
@@ -20,13 +20,12 @@ void ResponsibleBehavior::handleEvent(Player& player, string& result) const {
     result = getPotionsPurchaseMessage(player, amountOfPotions);
 }
 
-const string RiskTakingBehavior::NAME = "RiskTaking";
-
 void RiskTakingBehavior::handleEvent(Player& player, string& result) const {
     int amountOfPotions = 0;
-    if(player.getHealthPoints() < 50) {
+    if((player.getHealthPoints() < 50) && (player.getCoins() >= PotionsMerchant::POTION_COST)) {
         player.pay(PotionsMerchant::POTION_COST); 
         player.heal(PotionsMerchant::HP_TO_GIVE); 
+        amountOfPotions++;
     }
     result = getPotionsPurchaseMessage(player, amountOfPotions);
 }
