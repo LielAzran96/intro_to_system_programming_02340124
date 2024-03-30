@@ -29,11 +29,11 @@ int Player::getForce() const {
 }
 
 int Player::getHealthPoints() const {
-    return m_hp.m_healthPoints;
+    return m_hp.getCurrentHP();
 }
 
 int Player::getMaxHp() const {
-    return m_hp.m_maxHealthPoints;
+    return m_hp.getMaxHP();
 }
 
 int Player::getCoins() const {
@@ -103,18 +103,6 @@ const Job& Player::getJob() const {
     return *m_job;
 }
 
-void Player::handleSolarEclipse(string& result) {
-    m_job->handleEvent(*this,result);
-}
-
-void Player::handlePotionsMerchant(string& result) {
-    m_behavior->handleEvent(*this,result);
-}
-
-bool Player::handleBattle(int monsterPower, int monsterLoot, int monsterDamage) {
-    return m_job->handleBattle(*this, monsterPower, monsterLoot, monsterDamage);
-}
-
 bool operator<(const Player& player1, const Player& player2) {
     if (player1.m_level != player2.m_level) {
         return player1.m_level > player2.m_level; // Sort by level from high to low
@@ -124,4 +112,5 @@ bool operator<(const Player& player1, const Player& player2) {
         return player1.m_name < player2.m_name; // Sort by name in lexicographical order
     }
 }
+
 

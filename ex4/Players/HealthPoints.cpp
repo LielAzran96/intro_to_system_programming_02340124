@@ -8,12 +8,7 @@
 static void checkHealthPointsValues(int& healthPoints, const int maxHealthPoints);
 
 /*c'tor*/
-HealthPoints::HealthPoints(const int maxHealthPoints) : m_healthPoints(maxHealthPoints), m_maxHealthPoints(maxHealthPoints){
-    // if(maxHealthPoints<=0) {
-    //     throw HealthPoints::InvalidArgument();
-    // }
-
-}
+HealthPoints::HealthPoints(const int maxHealthPoints) : m_healthPoints(maxHealthPoints), m_maxHealthPoints(maxHealthPoints){}
 
 static void checkHealthPointsValues(int& healthPoints, const int maxHealthPoints) {
     if(healthPoints > maxHealthPoints) {
@@ -24,9 +19,13 @@ static void checkHealthPointsValues(int& healthPoints, const int maxHealthPoints
     }
 }
 
-// int HealthPoints::getCurrentHP() const {
-//     return m_healthPoints;
-// }
+int HealthPoints::getCurrentHP() const {
+    return m_healthPoints;
+}
+
+int HealthPoints::getMaxHP() const {
+    return m_maxHealthPoints;
+}
 
 HealthPoints& HealthPoints::operator+=(const int HealthPointToAdd) {
     m_healthPoints += HealthPointToAdd;

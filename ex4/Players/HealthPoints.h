@@ -22,13 +22,11 @@ public:
 
     HealthPoints operator+(const int HealthPointToAdd) const;
     HealthPoints operator-(const int HealthPointToRemove) const;
-
-    /*class for exceptions - if a negative number is passed to the c'tor we'll throw an exception from this type*/
-    class InvalidArgument {};
-
-    // int getCurrentHP() const;
     
-// private:
+    int getCurrentHP() const;
+    int getMaxHP() const;
+
+private:
     int m_healthPoints; 
     int m_maxHealthPoints; 
     static const int DEFAULT_MAX_HP = 100;

@@ -158,30 +158,6 @@ public:
     */
     const Job& getJob() const;
 
-    /**
-     * Handles the effects of a Solar Eclipse event.
-     * 
-     * @param result - string that contains how many force the player lost\recieve.
-    */
-    void handleSolarEclipse(std::string& result); 
-
-    /**
-     * Handles the effects of a Potions Merchant event.
-     * 
-     * @param result - string that containts how many potions the player bought
-    */
-    void handlePotionsMerchant(std::string& result); 
-
-    /**
-     * Handles the battle with a monster.
-     * 
-     * @param monsterPower Power of the monster.
-     * @param monsterLoot Loot of the monster.
-     * @param monsterDamage Damage of the monster.
-     * @return True if the battle is successful, false otherwise.
-    */
-    bool handleBattle(int monsterPower, int monsterLoot, int monsterDamage); 
-
 private:
     std::string m_name;
     int m_level;

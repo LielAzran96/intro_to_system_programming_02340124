@@ -2,30 +2,39 @@
 #include "Player.h"
 #include "../Cards/Events.h"
 #include <memory>
-#include "../utilities.h"
+#include "utilities.h"
+#include <algorithm>
 
 const vector<string> Behavior::BEHAVIOR_VECTOR = {"Responsible", "RiskTaking"};
+
+Behavior::Behavior(const string& behaviorName) : m_behaviorName(behaviorName) {};
 
 const string& Behavior::getName() const {
     return m_behaviorName;
 }
 
-void ResponsibleBehavior::handleEvent(Player& player, string& result) const {
-    int amountOfPotions = 0;
-     while((player.getCoins() >= PotionsMerchant::POTION_COST) && (player.getHealthPoints() != player.getMaxHp())) {
-        player.pay(PotionsMerchant::POTION_COST); 
-        player.heal(PotionsMerchant::HP_TO_GIVE);
-        amountOfPotions++;
+ResponsibleBehavior::ResponsibleBehavior() : Behavior(BEHAVIOR_VECTOR[0]) {};
+
+int ResponsibleBehavior::handlePotionsMerchant(const Player& player) const {
+    int amountOfPotionsByMoney = static_cast<int> (player.getCoins()/PotionsMerchant::POTION_COST);
+    int amountOfPotionsByHP = static_cast<int>((player.getMaxHp() - player.getHealthPoints()) / PotionsMerchant::HP_TO_GIVE);
+    if(amountOfPotionsByMoney >= 1) {
+        /*return the minimum amount of potions a player can buy based on his current coins and HP*/
+        return std::min(amountOfPotionsByMoney, amountOfPotionsByHP);
     }
-    result = getPotionsPurchaseMessage(player, amountOfPotions);
+    else {
+        return 0;
+    }
 }
 
-void RiskTakingBehavior::handleEvent(Player& player, string& result) const {
-    int amountOfPotions = 0;
-    if((player.getHealthPoints() < 50) && (player.getCoins() >= PotionsMerchant::POTION_COST)) {
-        player.pay(PotionsMerchant::POTION_COST); 
-        player.heal(PotionsMerchant::HP_TO_GIVE); 
-        amountOfPotions++;
+
+RiskTakingBehavior::RiskTakingBehavior() : Behavior(BEHAVIOR_VECTOR[1]) {};
+
+int RiskTakingBehavior::handlePotionsMerchant(const Player& player) const {
+    if((player.getHealthPoints()) < 50 && (player.getCoins() >= PotionsMerchant::POTION_COST)) {
+        return 1;
     }
-    result = getPotionsPurchaseMessage(player, amountOfPotions);
+    else {
+        return 0;
+    }
 }

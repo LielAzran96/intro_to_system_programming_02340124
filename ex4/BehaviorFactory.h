@@ -2,7 +2,6 @@
 #ifndef EX4_BehaviorFactory_H
 #define EX4_BehaviorFactory_H
 
-
 #include <memory>
 #include "Players/Behavior.h"
 #include <stdexcept> 
@@ -43,17 +42,7 @@ public:
      * @return
      *     std::unique_ptr<Behavior> of the new instance of behavior.
      */
-    unique_ptr<Behavior> create(const string& behaviorName) {
-        if(behaviorName == "Responsible") {
-            return unique_ptr<ResponsibleBehavior>(new ResponsibleBehavior());
-        }
-        else if(behaviorName == "RiskTaking") {
-            return unique_ptr<RiskTakingBehavior>(new RiskTakingBehavior());
-        }
-        else {
-            throw std::runtime_error("Invalid Players File"); 
-        }
-    }
+    unique_ptr<Behavior> create(const string& behaviorName);
 };
 
 #endif //EX04_CARDFACTORY_H

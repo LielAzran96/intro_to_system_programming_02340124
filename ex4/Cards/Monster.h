@@ -2,7 +2,6 @@
 #define EX4_Monster_H
 
 #include "Card.h"
-#include <map>
 
 class Monster : public Card {
 public:
@@ -10,8 +9,14 @@ public:
      * Constructor for Monster card.
      * 
      * @param name - The name of the monster.
+     * @param power - the power of the monster.
+     * @param loot - the loot given when winning the monster.
+     * @param damage - the damage getting when loosing the monster.
+     * 
+     * @return
+     *      A new instance of Monster Card.
      */
-    Monster(const std::string& name);
+    Monster(const string& name, int power, int loot, int damage);
 
     /**
      * Default constructor for Monster card - created for the "Gang" case.
@@ -21,8 +26,7 @@ public:
     Monster(const Monster&) = default;
     Monster& operator=(const Monster&) = default;
 
-    /*Static constant representing the monster map*/
-    static const std::map<std::string, std::map<std::string, int>> MONSTER_MAP;
+  
 
     /**
      * Applies the effect of the Monster card on a player.
@@ -37,7 +41,10 @@ public:
      * 
      * @return - The description of the Monster card.
      */
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
+    int getPower() const;
+    int getLoot() const;
+    int getDamage() const;
 
 protected:
     int m_power;    
@@ -48,44 +55,37 @@ protected:
 class Gang : public Monster {
 public:
     /**
-     * Default constructor for Gang card.
+     * Constructor for Gang card.
      */
-    Gang() : Monster(), m_numberOfMonsters(0) {};
+    Gang();
 
     // Destructor
     ~Gang() = default;
-    Gang(const Gang&) = delete;
-    Gang& operator=(const Gang&) = delete;
+    Gang(const Gang&) = default;
+    Gang& operator=(const Gang&) = default;
 
     /**
      * Adds a monster to the gang.
      * note - we dont add the monster itself, but it's values
      * 
-     * @param name - The name of the monster that it's params needs to be added.
+     * @param monster - The monster that it's params needs to be added.
      */
-    void addMonster(const std::string& name);
+    void addMonster(const Monster& monster);
+
+   /**
+     * Gets the number of monsters in the gang. in case of gang as - "Gang of <numberOfMonsters> members" 
+     * @return
+     *       the number of monsters in the gang.
+    */
+    int getNumberOfMonsters() const;
 
     /**
-     * Sets the number of monsters in the gang.
-     * 
-     * @param number - The number of monsters in the gang.
-     */
-    void setMonstersNumber(int number);
+     * Sets the card's name as - "Gang of <m_numberOfMonsters> members".
+    */ 
+    void setGangName(); 
 
-    /**
-     * Gets the description of the Gang card.
-     * 
-     * @return - The description of the Gang card.
-     */
-    std::string getDescription() const override;
-
-    /**
-     * Exception class for when a monster is not found in the gang.
-     */
-    class MonsterNotFound : std::exception {};
-
-protected:
-    int m_numberOfMonsters;    
+private:
+    int m_numberOfMonsters;
 };
 
 #endif //EX4_Monster_H

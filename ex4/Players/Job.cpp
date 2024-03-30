@@ -1,41 +1,27 @@
 #include "Job.h"
 #include "../Cards/Card.h"
 #include "../Cards/Events.h"
-#include "../utilities.h"
+#include "utilities.h"
 #include "Player.h"
 using std::vector;
 using std::string;
-// class SolarEclipse;
 const vector<string> Job::JOB_VECTOR = {"Warrior", "Sorcerer"};
 
 /********Job*********/
+
+Job::Job(const std::string& jobName) : m_jobName(jobName) {};
+
 const string& Job::getName() const {
     return m_jobName;
 }
 
-bool Job::handleBattle(Player& player, int monsterPower, int monsterLoot, int monsterDamage) const {
-    bool isWin = true;
-    if(player.getCombatPower() > monsterPower) {
-        player.levelUp();
-        player.addCoins(monsterLoot);
-        isWin = true;
-    }
-    /*loosing the battle*/
-    else {
-        player.damageHP(monsterDamage);
-        isWin = false;
-    }
-    return isWin;
+bool Job::handleBattle(Player& player, int monsterPower) const {
+    return (player.getCombatPower() > monsterPower);
 }
 
-void Job::handleEvent(Player& player, string& result) const {
+int Job::handleSolarEclipse() const {
     /*remove force*/
-    if(player.updateForce(-SolarEclipse::FORCE_TO_UPDATE)){
-        result = getSolarEclipseMessage(player, -SolarEclipse::FORCE_TO_UPDATE);
-    } 
-    else {
-        result = getSolarEclipseMessage(player, 0);
-    }
+    return -1;
 }
 
 int Job::getPower(const Player& player) const {
@@ -43,20 +29,18 @@ int Job::getPower(const Player& player) const {
 }
 
 /********Warrior*********/
+Warrior::Warrior() : Job(JOB_VECTOR[0]) {};
+
 int Warrior::getPower(const Player& player) const {
     return player.getForce()*2 + player.getLevel();
 }
 
 
-
 /********Sorcerer*********/
-void Sorcerer::handleEvent(Player& player, string& result) const {
+Sorcerer::Sorcerer() : Job(JOB_VECTOR[1]) {};
+
+int Sorcerer::handleSolarEclipse() const {
     /*add force*/
-    if(player.updateForce(SolarEclipse::FORCE_TO_UPDATE)) {
-        result = getSolarEclipseMessage(player, SolarEclipse::FORCE_TO_UPDATE);
-    }
-    else {
-        result = getSolarEclipseMessage(player, 0);
-    }
+    return 1;
 }
 

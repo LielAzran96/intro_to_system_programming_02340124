@@ -4,20 +4,8 @@
 #include <algorithm>
 #include "Players/Player.h"
 #include "Cards/Card.h"
-#include "Players/Behavior.h" // Include the Behavior header file here
-#include "Players/Job.h" // Include the Behavior header file here
-// #include <ios>
-
-// static void preprocessInput(string& input) {
-//     /*Remove all carriage return characters ('\r') from the input string*/
-//     string processedInput;
-//     for (char c : input) {
-//         if (c != '\r') {
-//             processedInput += c;
-//         }
-//     }
-//     input = processedInput;
-// }
+#include "Players/Behavior.h" 
+#include "Players/Job.h" 
 
 static bool checkNameCorrectness(const string& name) {
     if(name.length() < 3 || name.length() > 15) {
@@ -32,23 +20,22 @@ static bool checkNameCorrectness(const string& name) {
 }
 
 
-
 Mtmchkin::Mtmchkin(const string& deckPath, const string& playersPath) : m_players(), m_playersSorted(),
 m_cards(), m_currentPlayer(nullptr), m_currentCard(nullptr), m_turnIndex(0), m_behaviorFactory(new BehaviorFactory()), 
 m_jobFactory(new JobFactory()), m_cardFactory(new CardFactory()), m_isAnyPlayerReachedMaxLevel(false)  {
 
-    std::ifstream playersFile(playersPath);
-    if(!playersFile) {
-        throw std::runtime_error("Invalid Players File"); 
-    }
     std::ifstream cardsFile(deckPath);
     if(!cardsFile) {
         throw std::runtime_error("Invalid Cards File"); 
     }
-    
+    std::ifstream playersFile(playersPath);
+    if(!playersFile) {
+        throw std::runtime_error("Invalid Players File"); 
+    }
+
+    updateCardQueue(cardsFile);
     updatePlayersVector(playersFile);
     m_playersSorted = m_players;
-    updateCardQueue(cardsFile);
     this->m_turnIndex = 1;
 }
 
@@ -75,7 +62,7 @@ void Mtmchkin::updatePlayersVector(std::ifstream& playersFile) {
 
 void Mtmchkin::updateCardQueue(std::ifstream& cardsFile) {
     std::string word;
-    while (cardsFile >> word) {
+    while (cardsFile >>std::ws>> word) {
         m_cards.push(m_cardFactory->create(cardsFile, word));
     }
     if(m_cards.size() < 2) {

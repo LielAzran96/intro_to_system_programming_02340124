@@ -3,7 +3,8 @@
 
 #include <memory>
 #include "Cards/Card.h"
-
+#include <map>
+#include <stdexcept> 
 
 class CardFactory {
 public:
@@ -42,6 +43,9 @@ public:
      */
     std::unique_ptr<Card> create(std::ifstream& cardsFile, const std::string& cardName) const;
 
+       /*Static constant representing the monster map*/
+    static const std::map<std::string, std::map<std::string, int>> MONSTER_MAP;
+ 
 };
 
 #endif //EX4_CardFactory_H

@@ -1,41 +1,91 @@
 #ifndef EX4_Behavior_H
 #define EX4_Behavior_H
+
 #include <string>
-using std::string;
 #include <vector>
+using std::string;
 using std::vector;
+
 class Player;
 
 class Behavior {
 public:
-    Behavior(const string& behaviorName) : m_behaviorName(behaviorName) {};
+    /**
+     * Constructor for the Behavior class.
+     *
+     * @param behaviorName - The name of the behavior.
+     */
+    Behavior(const string& behaviorName);
+
+    /**
+     * Virtual destructor for the Behavior class.
+     */
     virtual ~Behavior() = default;
+
+    /**
+     * Copy constructor for the Behavior class.
+     */
     Behavior(const Behavior&) = default;
+
+    /**
+     * Copy assignment operator for the Behavior class.
+     */
     Behavior& operator=(const Behavior&) = default;
-    virtual void handleEvent(Player& player, string& result) const = 0; 
+
+    /**
+     * Virtual method to handle the PotionsMerchant event for a player with this behavior.
+     *
+     * @param player - The player to handle the event for.
+     * @return 
+     *     the number of potions a player can buy.
+     */
+    virtual int handlePotionsMerchant(const Player& player) const = 0; 
+
+    /**
+     * Getter for the name of the behavior.
+     *
+     * @return The name of the behavior.
+     */
     const string& getName() const;
+
+    /**
+     * Static vector containing behavior names.
+     */
     static const vector<string> BEHAVIOR_VECTOR;
+
 protected:
     string m_behaviorName;
 };
 
 class ResponsibleBehavior : public Behavior {
 public:
-    ResponsibleBehavior() : Behavior(BEHAVIOR_VECTOR[0]) {};
+    ResponsibleBehavior();
     ~ResponsibleBehavior() = default;
-    ResponsibleBehavior(const ResponsibleBehavior&) = default;
-    ResponsibleBehavior& operator=(const ResponsibleBehavior&) = default;
-    void handleEvent(Player& player, string& result) const override;
+    /**
+     * Copy c'tor & assignment operator deleted.
+     */
+    ResponsibleBehavior(const ResponsibleBehavior&) = delete;
+    ResponsibleBehavior& operator=(const ResponsibleBehavior&) = delete;
+
+    /* Override method to handle the PotionsMerchant event for a player with this behavior
+    a responsible player will buy as many potions he can, until he runs out of coins or his hp is maximal*/
+    int handlePotionsMerchant(const Player& player) const override;
 };
 
 class RiskTakingBehavior : public Behavior {
 public:
-    RiskTakingBehavior() : Behavior(BEHAVIOR_VECTOR[1]) {};
+ 
+    RiskTakingBehavior();
     ~RiskTakingBehavior() = default;
-    RiskTakingBehavior(const RiskTakingBehavior&) = default;
-    RiskTakingBehavior& operator=(const RiskTakingBehavior&) = default;
-    void handleEvent(Player& player, string& result) const override;
+    /**
+     * Copy c'tor & assignment operator deleted 
+     */
+    RiskTakingBehavior(const RiskTakingBehavior&) = delete;
+    RiskTakingBehavior& operator=(const RiskTakingBehavior&) = delete;
 
+    /* Override method to handle the PotionsMerchant event for a player with this behavior
+    a riskTaking player will buy up to one potion, only if his hp below 50 points*/
+    int handlePotionsMerchant(const Player& player) const override;
 };
 
 #endif //EX4_Behavior_H

@@ -3,6 +3,7 @@
 
 #include "Card.h"
 
+
 class SolarEclipse : public Card {
 public:
     /**

@@ -2,7 +2,6 @@
 #ifndef EX4_JobFactory_H
 #define EX4_JobFactory_H
 
-
 #include <memory>
 #include "Players/Job.h"
 #include <stdexcept> 
@@ -45,17 +44,7 @@ public:
      * @return
      *     std::unique_ptr<Job> of the new instance of Job.
      */
-    unique_ptr<Job> create(const string& JobName) {
-        if(JobName == "Warrior") {
-            return unique_ptr<Job>(new Warrior());
-        }
-        else if(JobName == "Sorcerer") {
-            return unique_ptr<Job>(new Sorcerer());
-        }
-        else {
-            throw std::runtime_error("Invalid Players File"); 
-        }
-    }
+    unique_ptr<Job> create(const string& JobName);
 };
 
 #endif //EX4_JobFactory_H
